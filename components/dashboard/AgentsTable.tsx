@@ -11,13 +11,16 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Edit2, Trash2 } from "lucide-react"
+import { Edit2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface AgentsTableProps {
   agents: Agent[]
 }
 
 export function AgentsTable({ agents }: AgentsTableProps) {
+  const router = useRouter()
+
   return (
     <Table>
       <TableHeader>
@@ -42,14 +45,13 @@ export function AgentsTable({ agents }: AgentsTableProps) {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex space-x-2">
-                <Button variant="ghost" size="icon">
-                  <Edit2 className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => router.push(`/dashboard/agent/${agent.agent_id}`)}
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
             </TableCell>
           </TableRow>
         ))}
