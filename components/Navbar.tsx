@@ -12,19 +12,26 @@ import {
 } from "@/components/ui/dialog"
 import { SignInForm } from "@/components/auth/SignInForm"
 import { SignUpForm } from "@/components/auth/SignUpForm"
+import { ArrowRight } from "lucide-react"
 
 export function Navbar() {
   return (
     <nav className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="font-bold">AI CALL CENTER</span>
+          <span className="text-xl font-bold">AI CALL CENTER</span>
         </Link>
 
         <div className="flex items-center gap-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline">Sign In</Button>
+              <Button 
+                variant="ghost"
+                className="group relative transition-all duration-300 hover:pr-12"
+              >
+                Sign In
+                <ArrowRight className="absolute right-4 opacity-0 transition-all duration-300 group-hover:opacity-100" size={20} />
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -39,7 +46,12 @@ export function Navbar() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Sign Up</Button>
+              <Button
+                className="group relative transition-all duration-300 hover:pr-12"
+              >
+                Sign Up
+                <ArrowRight className="absolute right-4 opacity-0 transition-all duration-300 group-hover:opacity-100" size={20} />
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

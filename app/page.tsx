@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar"
 import { Button } from "@/components/ui/button"
+import { ArrowRight, Sparkles, Phone, MessageSquare, Clock, Shield } from "lucide-react"
 import {
   Carousel,
   CarouselContent,
@@ -24,21 +25,32 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="container flex flex-col items-center justify-center space-y-4 pt-24 text-center">
-        <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
-          Let our Agent manage your customer interactions for you
+      <section className="container flex flex-col items-center justify-center space-y-8 py-24 text-center">
+        <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
+          <Sparkles className="h-4 w-4" />
+          <span>AI-Powered Customer Support</span>
+        </div>
+        <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+          Let our Agent manage your <br className="hidden sm:inline" />
+          customer interactions for you
         </h1>
         <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
           Empower your business with AI-driven customer support that never sleeps.
         </p>
-        <div className="space-x-4">
+        <div className="space-y-4 md:space-y-0 md:space-x-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="lg">Get Started</Button>
+              <Button 
+                size="lg"
+                className="group relative font-display transition-all duration-300 hover:pr-12"
+              >
+                Get Started
+                <ArrowRight className="absolute right-4 opacity-0 transition-all duration-300 group-hover:opacity-100" size={20} />
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Create an account</DialogTitle>
+                <DialogTitle className="font-display">Create an account</DialogTitle>
                 <DialogDescription>
                   Get started with AI Call Center today
                 </DialogDescription>
@@ -47,11 +59,30 @@ export default function Home() {
             </DialogContent>
           </Dialog>
         </div>
+
+        {/* Features Grid */}
+        <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+          <div className="flex flex-col items-center space-y-2 rounded-lg border p-4">
+            <Phone className="h-8 w-8 text-primary" />
+            <h3 className="font-display text-xl font-semibold">24/7 Availability</h3>
+            <p className="text-center text-sm text-muted-foreground">Always ready to handle customer calls</p>
+          </div>
+          <div className="flex flex-col items-center space-y-2 rounded-lg border p-4">
+            <MessageSquare className="h-8 w-8 text-primary" />
+            <h3 className="font-display text-xl font-semibold">Smart Responses</h3>
+            <p className="text-center text-sm text-muted-foreground">AI-powered natural conversations</p>
+          </div>
+          <div className="flex flex-col items-center space-y-2 rounded-lg border p-4">
+            <Shield className="h-8 w-8 text-primary" />
+            <h3 className="font-display text-xl font-semibold">Secure & Reliable</h3>
+            <p className="text-center text-sm text-muted-foreground">Enterprise-grade security</p>
+          </div>
+        </div>
       </section>
 
       {/* Testimonials Section */}
       <section className="container py-24">
-        <h2 className="mb-12 text-center text-3xl font-bold">
+        <h2 className="mb-12 text-center font-display text-3xl font-bold tracking-tight">
           What our customers say
         </h2>
         <Carousel className="mx-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
@@ -60,34 +91,40 @@ export default function Home() {
               <CarouselItem key={index}>
                 <div className="p-4">
                   <blockquote className="space-y-2">
-                    <p className="text-lg">{testimonial.content}</p>
-                    <footer className="text-sm text-muted-foreground">
-                      {testimonial.author}
+                    <p className="text-lg italic">{testimonial.content}</p>
+                    <footer className="text-sm font-medium text-muted-foreground">
+                      — {testimonial.author}
                     </footer>
                   </blockquote>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="hidden md:flex" />
+          <CarouselNext className="hidden md:flex" />
         </Carousel>
       </section>
 
       {/* Footer */}
       <footer className="mt-auto border-t">
-        <div className="container flex h-24 flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+        <div className="container flex h-24 flex-col items-center justify-between gap-4 py-8 md:flex-row">
+          <p className="font-display text-center text-sm leading-loose text-muted-foreground md:text-left">
             By NextGen Tech
           </p>
           <div className="flex items-center gap-4">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost">About AI Call Center</Button>
+                <Button 
+                  variant="ghost"
+                  className="group relative font-display transition-all duration-300 hover:pr-12"
+                >
+                  About AI Call Center
+                  <ArrowRight className="absolute right-4 opacity-0 transition-all duration-300 group-hover:opacity-100" size={20} />
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>About AI Call Center</DialogTitle>
+                  <DialogTitle className="font-display">About AI Call Center</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <p>
@@ -102,11 +139,17 @@ export default function Home() {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost">Contact Us</Button>
+                <Button 
+                  variant="ghost"
+                  className="group relative font-display transition-all duration-300 hover:pr-12"
+                >
+                  Contact Us
+                  <ArrowRight className="absolute right-4 opacity-0 transition-all duration-300 group-hover:opacity-100" size={20} />
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Contact Us</DialogTitle>
+                  <DialogTitle className="font-display">Contact Us</DialogTitle>
                   <DialogDescription>
                     Send us a message and we'll get back to you soon.
                   </DialogDescription>
