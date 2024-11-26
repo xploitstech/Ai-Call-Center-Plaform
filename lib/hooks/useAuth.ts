@@ -15,16 +15,16 @@ export function useAuth() {
 
   const signIn = async (email: string, password: string) => {
     try {
-      logger.debug('Attempting sign in:', email)
       setIsLoading(true)
       setError(null)
+      logger.debug('Attempting sign in:', email)
       
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
+      if (signInError) throw signInError
 
       logger.info('User signed in successfully:', email)
       router.refresh()
@@ -41,13 +41,16 @@ export function useAuth() {
     try {
       setIsLoading(true)
       setError(null)
+      logger.debug('Attempting sign up:', email)
       
       const user = await signUpAction(email, password, name)
-      if (!user) throw new Error("Failed to create user")
+      if (!user) throw new Error('Failed to create user')
 
+      logger.info('User signed up successfully:', email)
       router.refresh()
       router.push('/dashboard')
     } catch (e: any) {
+      logger.error('Sign up error:', e.message)
       setError(e.message)
     } finally {
       setIsLoading(false)
@@ -57,12 +60,16 @@ export function useAuth() {
   const signOut = async () => {
     try {
       setIsLoading(true)
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
+      logger.debug('Attempting sign out')
       
+      const { error: signOutError } = await supabase.auth.signOut()
+      if (signOutError) throw signOutError
+
+      logger.info('User signed out successfully')
       router.refresh()
       router.push('/')
     } catch (e: any) {
+      logger.error('Sign out error:', e.message)
       setError(e.message)
     } finally {
       setIsLoading(false)
