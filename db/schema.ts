@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, varchar, uuid, integer } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, varchar, uuid, integer, boolean } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 // Create a function to generate UUIDs
@@ -21,6 +21,8 @@ export const agents = pgTable("agents", {
   language: text("language").array().notNull(),
   integration: text("integration").array(),
   voice: varchar("voice", { length: 50 }),
+  debug_mode: boolean("debug_mode").default(false),
+  logging_enabled: boolean("logging_enabled").default(false),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
 });

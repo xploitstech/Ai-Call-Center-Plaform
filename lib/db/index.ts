@@ -1,12 +1,25 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from 'pg';
 import * as schema from "@/db/schema";
+import { logger } from "@/lib/utils/logger";
 
 const connectionString = process.env.POSTGRES_URL!;
 
+// Create a PostgreSQL pool with pg
+const pool = new Pool({
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// Add error handling for the pool
+pool.on('error', (err) => {
+  logger.error('Unexpected error on idle client', err);
+});
+
 // For server-side operations
-const client = postgres(connectionString);
-export const db = drizzle(client, { schema });
+export const db = drizzle(pool, { schema });
 
 // Types
 export type DbClient = typeof db;

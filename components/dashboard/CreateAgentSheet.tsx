@@ -33,7 +33,6 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
-import { cn } from "@/lib/utils"
 import {
   Accordion,
   AccordionContent,
@@ -48,12 +47,11 @@ import {
   Settings2, 
   Keyboard,
   Wrench,
-  Check
 } from "lucide-react"
 import { createNewAgent } from "@/app/actions/agent"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { getSession } from "@/lib/auth/server"
+import { logger } from "@/lib/utils/logger"
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
