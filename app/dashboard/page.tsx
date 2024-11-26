@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/auth/server"
 import { getAgentsByUserId } from "@/lib/db/actions"
 import { AgentsTable } from "@/components/dashboard/AgentsTable"
 import { NoAgentsPlaceholder } from "@/components/dashboard/NoAgentsPlaceholder"
+import { CreateAgentButton } from "@/components/dashboard/CreateAgentButton"
 import { logger } from "@/lib/utils/logger"
 
 export default async function DashboardPage() {
@@ -16,6 +17,7 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Dashboard</h1>
+          {agents.length > 0 && <CreateAgentButton />}
         </div>
 
         <Suspense fallback={<div>Loading agents...</div>}>
