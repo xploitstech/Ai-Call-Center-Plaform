@@ -39,7 +39,7 @@ export async function createAgent(data: NewAgent) {
   }
 }
 
-export async function getAgentsByUserId(userId: number) {
+export async function getAgentsByUserId(userId: string) {
   try {
     logger.debug('Fetching agents for user:', userId);
     const userAgents = await db.select().from(agents).where(eq(agents.user_id, userId));
@@ -78,6 +78,22 @@ export async function deleteAgent(agentId: number) {
     return agent;
   } catch (error) {
     logger.error('Error deleting agent:', error);
+    throw error;
+  }
+}
+
+export async function getAgentById(agentId: number) {
+  try {
+    logger.debug('Fetching agent:', agentId);
+    const [agent] = await db
+      .select()
+      .from(agents)
+      .where(eq(agents.agent_id, agentId));
+    
+    logger.info('Agent fetched successfully:', agent?.agent_id);
+    return agent;
+  } catch (error) {
+    logger.error('Error getting agent:', error);
     throw error;
   }
 } 

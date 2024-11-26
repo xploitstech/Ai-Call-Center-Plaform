@@ -24,7 +24,7 @@ export default function DashboardLayout({
             className="w-full justify-start text-base"
             onClick={() => router.push('/dashboard')}
           >
-            <Home className="mr-2 h-5 w-5" />
+            <Home className="mr-2 h-6 w-6" />
             Home
           </Button>
           <Button
@@ -32,7 +32,7 @@ export default function DashboardLayout({
             className="w-full justify-start text-base"
             onClick={() => router.push('/dashboard/settings')}
           >
-            <Settings className="mr-2 h-5 w-5" />
+            <Settings className="mr-2 h-6 w-6" />
             Settings
           </Button>
           <Button
@@ -40,7 +40,7 @@ export default function DashboardLayout({
             className="w-full justify-start text-base"
             onClick={() => router.push('/dashboard/billing')}
           >
-            <CreditCard className="mr-2 h-5 w-5" />
+            <CreditCard className="mr-2 h-6 w-6" />
             Billing
           </Button>
         </div>
@@ -52,7 +52,7 @@ export default function DashboardLayout({
           )}
           onClick={() => signOut()}
         >
-          <LogOut className="mr-2 h-5 w-5" />
+          <LogOut className="mr-2 h-6 w-6" />
           Logout
         </Button>
       </aside>

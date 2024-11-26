@@ -47,8 +47,13 @@ import {
   Mic, 
   Settings2, 
   Keyboard,
-  Wrench
+  Wrench,
+  Check
 } from "lucide-react"
+import { createNewAgent } from "@/app/actions/agent"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { getSession } from "@/lib/auth/server"
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -72,6 +77,7 @@ const AVAILABLE_LANGUAGES = [
 ]
 
 export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) {
+  const router = useRouter()
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -104,11 +110,17 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true)
-      // TODO: Implement agent creation
-      console.log(values)
+      const agent = await createNewAgent({
+        ...values,
+      })
+      
+      toast.success("Agent created successfully")
+      
+      router.push(`/dashboard/agent/${agent.agent_id}`)
       onOpenChange(false)
     } catch (error) {
-      console.error(error)
+      logger.error('Error creating agent:', error)
+      toast.error("Failed to create agent")
     } finally {
       setIsLoading(false)
     }
@@ -131,7 +143,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
-                    <Bot className="h-4 w-4" />
+                    <Bot className="h-5 w-5" />
                     Name
                   </FormLabel>
                   <FormControl>
@@ -145,7 +157,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
             <Accordion type="single" collapsible className="w-full [&_[data-radix-accordion-trigger]]:no-underline">
               <AccordionItem value="configure">
                 <AccordionTrigger className="flex gap-2">
-                  <Settings2 className="h-4 w-4" />
+                  <Settings2 className="h-5 w-5" />
                   Configure Agent
                 </AccordionTrigger>
                 <AccordionContent className="space-y-6">
@@ -155,7 +167,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
-                          <Keyboard className="h-4 w-4" />
+                          <Keyboard className="h-5 w-5" />
                           System Prompt
                         </FormLabel>
                         <FormControl>
@@ -176,7 +188,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4" />
+                          <MessageSquare className="h-5 w-5" />
                           Greeting Message
                         </FormLabel>
                         <FormControl>
@@ -197,18 +209,19 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                     render={() => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
-                          <Languages className="h-4 w-4" />
+                          <Languages className="h-5 w-5" />
                           Languages
                         </FormLabel>
                         <Select
                           onValueChange={(value) => addLanguage(value)}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={
-                              selectedLanguages.length === 0 
+                            <SelectValue>
+                              {selectedLanguages.length === 0 
                                 ? "Select languages" 
-                                : `${selectedLanguages.length} languages selected`
-                            } />
+                                : `${selectedLanguages.length} ${selectedLanguages.length === 1 ? 'language' : 'languages'} selected`
+                              }
+                            </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
                             {AVAILABLE_LANGUAGES.map((lang) => (
@@ -253,7 +266,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
-                          <Mic className="h-4 w-4" />
+                          <Mic className="h-5 w-5" />
                           Voice Type
                         </FormLabel>
                         <Select
@@ -277,7 +290,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
 
               <AccordionItem value="advanced">
                 <AccordionTrigger className="flex gap-2">
-                  <Wrench className="h-4 w-4" />
+                  <Wrench className="h-5 w-5" />
                   Advanced Settings
                 </AccordionTrigger>
                 <AccordionContent>

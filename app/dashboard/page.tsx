@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   
   try {
     logger.debug('Fetching agents for user:', session.user.id)
-    const agents = await getAgentsByUserId(parseInt(session.user.id))
+    const agents = await getAgentsByUserId(session.user.id)
     
     return (
       <div className="space-y-4">

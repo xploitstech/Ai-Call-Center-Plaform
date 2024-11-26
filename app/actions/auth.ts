@@ -19,8 +19,9 @@ export async function signUp(email: string, password: string, name: string) {
   const existingUser = await getUserByEmail(email);
   if (existingUser) return existingUser;
 
-  // Create the user in our database
+  // Create the user in our database with the Supabase UUID
   const dbUser = await createUser({
+    id: user.id, // Use Supabase user UUID
     email,
     name,
   });
