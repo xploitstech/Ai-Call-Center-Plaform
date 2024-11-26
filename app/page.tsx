@@ -1,101 +1,141 @@
-import Image from "next/image";
+import Image from "next/image"
+import { Navbar } from "@/components/Navbar"
+import { Button } from "@/components/ui/button"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { SignUpForm } from "@/components/auth/SignUpForm"
+import { submitContactForm } from "@/app/actions/contact"
+import { ContactForm } from "@/components/ContactForm"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="container flex flex-col items-center justify-center space-y-4 pt-24 text-center">
+        <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+          Let our Agent manage your customer interactions for you
+        </h1>
+        <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
+          Empower your business with AI-driven customer support that never sleeps.
+        </p>
+        <div className="space-x-4">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="lg">Get Started</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create an account</DialogTitle>
+                <DialogDescription>
+                  Get started with AI Call Center today
+                </DialogDescription>
+              </DialogHeader>
+              <SignUpForm />
+            </DialogContent>
+          </Dialog>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="container py-24">
+        <h2 className="mb-12 text-center text-3xl font-bold">
+          What our customers say
+        </h2>
+        <Carousel className="mx-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+          <CarouselContent>
+            {testimonials.map((testimonial, index) => (
+              <CarouselItem key={index}>
+                <div className="p-4">
+                  <blockquote className="space-y-2">
+                    <p className="text-lg">{testimonial.content}</p>
+                    <footer className="text-sm text-muted-foreground">
+                      {testimonial.author}
+                    </footer>
+                  </blockquote>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </section>
+
+      {/* Footer */}
+      <footer className="mt-auto border-t">
+        <div className="container flex h-24 flex-col items-center justify-between gap-4 md:flex-row">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            By NextGen Tech
+          </p>
+          <div className="flex items-center gap-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost">About AI Call Center</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>About AI Call Center</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <p>
+                    AI Call Center is a cutting-edge platform that leverages artificial intelligence to revolutionize customer support operations.
+                  </p>
+                  <p>
+                    Our platform enables businesses to provide 24/7 customer support through AI agents that can understand, respond, and learn from interactions.
+                  </p>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost">Contact Us</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Contact Us</DialogTitle>
+                  <DialogDescription>
+                    Send us a message and we'll get back to you soon.
+                  </DialogDescription>
+                </DialogHeader>
+                <ContactForm />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
+
+const testimonials = [
+  {
+    content: "AI Call Center has transformed how we handle customer support. Our response times have improved dramatically.",
+    author: "Sarah Johnson, CEO of TechCorp"
+  },
+  {
+    content: "The AI agents are incredibly efficient and our customers love the 24/7 availability.",
+    author: "Michael Chen, Support Manager"
+  },
+  {
+    content: "Implementation was smooth and the results were immediate. Highly recommended!",
+    author: "Lisa Rodriguez, Operations Director"
+  }
+]
