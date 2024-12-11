@@ -3,14 +3,11 @@ import { Pool } from 'pg';
 import * as schema from "@/db/schema";
 import { logger } from "@/lib/utils/logger";
 
-const connectionString = process.env.POSTGRES_URL!;
+const connectionString = process.env.DATABASE_URL!;
 
 // Create a PostgreSQL pool with pg
 const pool = new Pool({
   connectionString,
-  ssl: {
-    rejectUnauthorized: false
-  }
 });
 
 // Add error handling for the pool
