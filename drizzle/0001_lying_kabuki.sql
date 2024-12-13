@@ -1,0 +1,1 @@
+ALTER TABLE "agents" ADD COLUMN "organisation" varchar(255);
