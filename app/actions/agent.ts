@@ -4,6 +4,7 @@ import { createAgent } from "@/lib/db/actions"
 import { logger } from "@/lib/utils/logger"
 import { revalidatePath } from "next/cache"
 import { getSession } from "@/lib/auth/server"
+import { getRabbitMQService } from "@/lib/services/rabbitmq"
 
 export async function createNewAgent(data: {
   name: string
@@ -29,6 +30,11 @@ export async function createNewAgent(data: {
       language: data.language,
       user_id: session.user.id,
     })
+    
+    // Create and bind RabbitMQ queue for the agent
+    const rabbitMQ = await getRabbitMQService();
+    await rabbitMQ.createAgentQueue(session.user.id, agent.agent_id.toString());
+    logger.info('Created and bound RabbitMQ queue for agent:', agent.agent_id);
     
     logger.info('Agent created successfully:', agent.agent_id)
     revalidatePath('/dashboard')

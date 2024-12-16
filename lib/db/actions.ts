@@ -74,7 +74,14 @@ export async function deleteAgent(agentId: number) {
       .delete(agents)
       .where(eq(agents.agent_id, agentId))
       .returning();
-    logger.info('Agent deleted successfully:', agent.agent_id);
+
+    if (agent) {
+      // TODO: Add queue deletion in RabbitMQ
+      // const rabbitMQ = await getRabbitMQService();
+      // await rabbitMQ.deleteQueue(agent.agent_id.toString());
+      logger.info('Agent deleted successfully:', agent.agent_id);
+    }
+
     return agent;
   } catch (error) {
     logger.error('Error deleting agent:', error);
