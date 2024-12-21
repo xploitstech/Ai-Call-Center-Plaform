@@ -53,24 +53,11 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { logger } from "@/lib/utils/logger"
 
-const AVAILABLE_LANGUAGES = [
-  { value: "EN", label: "English" },
-  { value: "HI", label: "Hindi" },
-  { value: "MR", label: "Marathi" },
-  // Add more languages as needed
-]
-
-const AVAILABLE_VOICES = [
-  { id: "3gsg3cxXyFLcGIfNbM6C", name: "Raju" },
-  { id: "90ipbRoKi4CpHXvKVtl0", name: "Anika" },
-] as const;
-
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  organisation: z.string().min(2, "Organisation must be at least 2 characters"),
   systemPrompt: z.string().min(10, "System prompt must be at least 10 characters"),
   greetingMessage: z.string().min(10, "Greeting message must be at least 10 characters"),
-  voice: z.string(),
+  voice: z.enum(["Type 1", "Type 2"]),
   language: z.array(z.string()).min(1, "Select at least one language"),
   advanced: z.boolean().default(false),
 })
@@ -79,6 +66,13 @@ interface CreateAgentSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
+
+const AVAILABLE_LANGUAGES = [
+  { value: "EN", label: "English" },
+  { value: "HI", label: "Hindi" },
+  { value: "MR", label: "Marathi" },
+  // Add more languages as needed
+]
 
 export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) {
   const router = useRouter()
@@ -89,10 +83,9 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      organisation: "",
       systemPrompt: "",
       greetingMessage: "",
-      voice: AVAILABLE_VOICES[0].id,
+      voice: "Type 1",
       language: [],
       advanced: false,
     },
@@ -153,22 +146,6 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Agent Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="organisation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <Bot className="h-5 w-5" />
-                    Organisation
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="Organisation Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -295,31 +272,11 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                           defaultValue={field.value}
                         >
                           <SelectTrigger>
-                            <SelectValue>
-                              {AVAILABLE_VOICES.find(v => v.id === field.value)?.name}
-                            </SelectValue>
+                            <SelectValue placeholder="Select a voice type" />
                           </SelectTrigger>
                           <SelectContent>
-                            {AVAILABLE_VOICES.map((voice) => (
-                              <SelectItem 
-                                key={voice.id} 
-                                value={voice.id}
-                                className="flex justify-between items-center"
-                              >
-                                <span>{voice.name}</span>
-                                <Button
-                                  type="button"
-                                  size="icon"
-                                  variant="ghost"
-                                  className="h-6 w-6"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                  }}
-                                >
-                                  <Mic className="h-4 w-4" />
-                                </Button>
-                              </SelectItem>
-                            ))}
+                            <SelectItem value="Type 1">Type 1</SelectItem>
+                            <SelectItem value="Type 2">Type 2</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

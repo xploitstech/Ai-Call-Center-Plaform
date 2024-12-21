@@ -8,7 +8,6 @@ import { getRabbitMQService } from "@/lib/services/rabbitmq"
 
 export async function createNewAgent(data: {
   name: string
-  organisation: string
   systemPrompt: string
   greetingMessage: string
   voice: string
@@ -23,7 +22,6 @@ export async function createNewAgent(data: {
     logger.debug('Creating new agent:', data.name)
     const agent = await createAgent({
       name: data.name,
-      organisation: data.organisation,
       system_prompt: data.systemPrompt,
       greeting_message: data.greetingMessage,
       voice: data.voice,
