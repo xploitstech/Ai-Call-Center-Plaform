@@ -109,7 +109,7 @@ export default function Home() {
       <footer className="mt-auto border-t">
         <div className="container flex h-24 flex-col items-center justify-between gap-4 py-8 md:flex-row">
           <p className="font-display text-center text-sm leading-loose text-muted-foreground md:text-left">
-            By NullPoint Pvt Ltd
+            By NextGen Tech
           </p>
           <div className="flex items-center gap-4">
             <Dialog>
