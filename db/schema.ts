@@ -16,6 +16,8 @@ export const agents = pgTable("agents", {
   agent_id: serial("agent_id").primaryKey(),
   user_id: uuid("user_id").references(() => users.id),
   name: varchar("name", { length: 255 }),
+  organization_name: varchar("organization_name", { length: 255 }),
+  phone_number: varchar("phone_number", { length: 20 }),
   system_prompt: text("system_prompt").default("Lorem Ipsum"),
   greeting_message: text("greeting_message").default("Lorem Ipsum"),
   language: text("language").array().notNull(),

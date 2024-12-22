@@ -47,18 +47,30 @@ import {
   Settings2, 
   Keyboard,
   Wrench,
+  Building2,
+  Phone,
+  Loader2,
 } from "lucide-react"
 import { createNewAgent } from "@/app/actions/agent"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { logger } from "@/lib/utils/logger"
+import { WelcomeMessage } from "./WelcomeMessage"
+import { useVoiceAudio } from "@/hooks/useVoiceAudio"
+
+const AVAILABLE_VOICES = [
+  { id: "3gsg3cxXyFLcGIfNbM6C", name: "Raju" },
+  { id: "90ipbRoKi4CpHXvKVtl0", name: "Anika" },
+] as const;
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   systemPrompt: z.string().min(10, "System prompt must be at least 10 characters"),
   greetingMessage: z.string().min(10, "Greeting message must be at least 10 characters"),
-  voice: z.enum(["Type 1", "Type 2"]),
+  voice: z.string().min(1, "Please select a voice"),
   language: z.array(z.string()).min(1, "Select at least one language"),
+  organization: z.string().min(2, "Organization must be at least 2 characters"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
   advanced: z.boolean().default(false),
 })
 
@@ -78,6 +90,7 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
   const router = useRouter()
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const { isPlaying, playVoice } = useVoiceAudio()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,8 +98,10 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
       name: "",
       systemPrompt: "",
       greetingMessage: "",
-      voice: "Type 1",
+      voice: AVAILABLE_VOICES[0].id,
       language: [],
+      organization: "",
+      phone: "",
       advanced: false,
     },
   })
@@ -129,8 +144,9 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Create Agent</SheetTitle>
-          <SheetDescription>
-            Fill in the details to create a new agent.
+          <SheetDescription className="space-y-4">
+            <div>Fill in the details to create a new agent.</div>
+            <WelcomeMessage />
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
@@ -146,6 +162,40 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Agent Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="organization"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Organization
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Organization Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    <Phone className="h-5 w-5" />
+                    Phone Number
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter phone number" type="tel" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -267,18 +317,46 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                           <Mic className="h-5 w-5" />
                           Voice Type
                         </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a voice type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Type 1">Type 1</SelectItem>
-                            <SelectItem value="Type 2">Type 2</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <div className="flex items-center gap-2">
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a voice type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {AVAILABLE_VOICES.map((voice) => (
+                                <SelectItem key={voice.id} value={voice.id}>
+                                  {voice.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            disabled={isPlaying || !field.value}
+                            onClick={async () => {
+                              try {
+                                logger.info(`Attempting to preview voice: ${field.value}`)
+                                await playVoice(field.value)
+                              } catch (error) {
+                                logger.error('Voice preview failed:', error)
+                                toast.error("Failed to play voice preview", {
+                                  description: "Please check your internet connection and try again"
+                                })
+                              }
+                            }}
+                          >
+                            {isPlaying ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Mic className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
