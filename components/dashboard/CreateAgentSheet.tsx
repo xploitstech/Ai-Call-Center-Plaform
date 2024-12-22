@@ -58,6 +58,12 @@ import { toast } from "sonner"
 import { logger } from "@/lib/utils/logger"
 import { WelcomeMessage } from "./WelcomeMessage"
 import { useVoiceAudio } from "@/hooks/useVoiceAudio"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const AVAILABLE_VOICES = [
   { id: "3gsg3cxXyFLcGIfNbM6C", name: "Raju" },
@@ -193,6 +199,24 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
                   <FormLabel className="flex items-center gap-2">
                     <Phone className="h-5 w-5" />
                     Phone Number
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 p-0 hover:bg-transparent"
+                            onClick={() => window.open('https://www.plivo.com/virtual-phone-numbers/', '_blank')}
+                          >
+                            <ExternalLink className="h-4 w-4 text-green-600 hover:text-green-700" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Get Number for your Voice Agent</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="Enter phone number" type="tel" {...field} />
@@ -395,15 +419,6 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
             </Accordion>
 
             <div className="space-y-4 pt-4">
-              <Button
-                type="button"
-                variant="default"
-                className="w-full bg-green-600 hover:bg-green-700 text-white gap-2"
-                onClick={() => window.open('https://www.plivo.com/virtual-phone-numbers/', '_blank')}
-              >
-                <ExternalLink className="h-4 w-4" />
-                Get Number for your Agent
-              </Button>
               <Button 
                 type="submit" 
                 disabled={isLoading}
