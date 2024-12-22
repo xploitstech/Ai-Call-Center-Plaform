@@ -50,6 +50,7 @@ import {
   Building2,
   Phone,
   Loader2,
+  ExternalLink,
 } from "lucide-react"
 import { createNewAgent } from "@/app/actions/agent"
 import { useRouter } from "next/navigation"
@@ -146,7 +147,6 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
           <SheetTitle>Create Agent</SheetTitle>
           <SheetDescription className="space-y-4">
             <div>Fill in the details to create a new agent.</div>
-            <WelcomeMessage />
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
@@ -394,10 +394,26 @@ export function CreateAgentSheet({ open, onOpenChange }: CreateAgentSheetProps) 
               </AccordionItem>
             </Accordion>
 
-            <div className="flex justify-end pt-4">
-              <Button type="submit" disabled={isLoading}>
+            <div className="space-y-4 pt-4">
+              <Button
+                type="button"
+                variant="default"
+                className="w-full bg-green-600 hover:bg-green-700 text-white gap-2"
+                onClick={() => window.open('https://www.plivo.com/virtual-phone-numbers/', '_blank')}
+              >
+                <ExternalLink className="h-4 w-4" />
+                Get Number for your Agent
+              </Button>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full"
+              >
                 {isLoading ? "Creating..." : "Create Agent"}
               </Button>
+              <FormDescription className="text-center text-sm text-muted-foreground">
+                Note: We use Plivo to handle calls. Please ensure to use only Plivo-provided phone numbers for optimal performance.
+              </FormDescription>
             </div>
           </form>
         </Form>
